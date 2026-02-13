@@ -1,0 +1,55 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-bottom: 2rem;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-link {
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #61dafb !important;
+  transform: translateY(-2px);
+}
+
+footer {
+  margin-top: auto;
+}
+
+/* Table styling */
+.table {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Card styling */
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Badge styling */
+.badge {
+  padding: 0.5em 0.8em;
+  font-size: 0.9rem;
+}
+
+/* Loading and error states */
+.alert {
+  margin-top: 2rem;
+}
+
