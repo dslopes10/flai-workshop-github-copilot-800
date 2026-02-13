@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
@@ -38,14 +39,30 @@ def api_root(request, format=None):
     """
     API root endpoint that lists all available endpoints
     """
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'teams': reverse('team-list', request=request, format=format),
-        'activities': reverse('activity-list', request=request, format=format),
-        'workouts': reverse('workout-list', request=request, format=format),
-        'leaderboard': reverse('leaderboard-list', request=request, format=format),
-        'admin': reverse('admin:index', request=request, format=format),
-    })
+    # Use codespace environment variable for URL construction
+    codespace_name = os.environ.get('CODESPACE_NAME', '')
+    
+    if codespace_name:
+        # Build URLs with codespace domain
+        base_url = f'https://{codespace_name}-8000.app.github.dev'
+        return Response({
+            'users': f'{base_url}/api/users/',
+            'teams': f'{base_url}/api/teams/',
+            'activities': f'{base_url}/api/activities/',
+            'workouts': f'{base_url}/api/workouts/',
+            'leaderboard': f'{base_url}/api/leaderboard/',
+            'admin': f'{base_url}/admin/',
+        })
+    else:
+        # Fallback to relative URLs for local development
+        return Response({
+            'users': reverse('user-list', request=request, format=format),
+            'teams': reverse('team-list', request=request, format=format),
+            'activities': reverse('activity-list', request=request, format=format),
+            'workouts': reverse('workout-list', request=request, format=format),
+            'leaderboard': reverse('leaderboard-list', request=request, format=format),
+            'admin': reverse('admin:index', request=request, format=format),
+        })
 
 
 urlpatterns = [
