@@ -46,29 +46,33 @@ function Teams() {
     <div className="container mt-5">
       <h1 className="mb-4">OctoFit Teams</h1>
       <div className="row">
-        {teams.map((team) => (
+        {teams.map((team, index) => (
           <div key={team._id} className="col-md-6 mb-4">
-            <div className="card shadow">
-              <div className="card-header bg-primary text-white">
-                <h3 className="mb-0">{team.name}</h3>
+            <div className="team-card" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="team-card-header">
+                <div className="team-icon">🤝</div>
+                <h3 className="team-name">{team.name}</h3>
+                <div className="team-member-count">
+                  <span className="count-badge">{team.members?.length || 0}</span>
+                  <span className="count-label">Members</span>
+                </div>
               </div>
-              <div className="card-body">
-                <h5 className="card-title">Team Members</h5>
-                <ul className="list-group list-group-flush">
-                  {team.members && team.members.map((member, index) => (
-                    <li key={index} className="list-group-item">
-                      <strong>{member}</strong>
-                    </li>
+              <div className="team-card-body">
+                <h5 className="team-section-title">Team Members</h5>
+                <div className="team-members-grid">
+                  {team.members && team.members.map((member, idx) => (
+                    <div key={idx} className="team-member-item">
+                      <div className="member-avatar">{member.charAt(0).toUpperCase()}</div>
+                      <span className="member-name">{member}</span>
+                    </div>
                   ))}
-                </ul>
-                <div className="mt-3">
-                  <p className="mb-1"><strong>Total Members:</strong> {team.members?.length || 0}</p>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+      <p className="team-count">Total teams: {teams.length}</p>
     </div>
   );
 }

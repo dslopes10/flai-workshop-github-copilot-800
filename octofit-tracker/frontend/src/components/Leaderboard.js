@@ -64,41 +64,55 @@ function Leaderboard() {
     return `#${rank}`;
   };
 
+  const getRankClass = (rank) => {
+    if (rank === 1) return 'rank-gold';
+    if (rank === 2) return 'rank-silver';
+    if (rank === 3) return 'rank-bronze';
+    return 'rank-normal';
+  };
+
   if (loading) return <div className="container mt-5"><h2>Loading leaderboard...</h2></div>;
   if (error) return <div className="container mt-5"><div className="alert alert-danger">Error: {error}</div></div>;
 
   return (
     <div className="container mt-5">
-      <h1 className="mb-4">OctoFit Leaderboard</h1>
+      <h1 className="mb-4">🏆 OctoFit Leaderboard</h1>
       
       <div className="row">
         {/* Individual Leaderboard */}
-        <div className="col-md-6 mb-4">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">
-              <h3 className="mb-0">Individual Rankings</h3>
+        <div className="col-lg-6 mb-4">
+          <div className="leaderboard-card">
+            <div className="leaderboard-header individual-header">
+              <div className="header-icon">👤</div>
+              <h3 className="leaderboard-title">Individual Rankings</h3>
             </div>
-            <div className="card-body">
+            <div className="leaderboard-body">
               <div className="table-responsive">
-                <table className="table table-hover">
+                <table className="table table-dark leaderboard-table">
                   <thead>
                     <tr>
                       <th>Rank</th>
                       <th>User</th>
-                      <th>Points</th>
+                      <th className="text-end">Points</th>
                     </tr>
                   </thead>
                   <tbody>
                     {individualLeaderboard.map((entry) => (
-                      <tr key={entry._id}>
-                        <td className="fs-4">{getMedalIcon(entry.rank)}</td>
-                        <td>
-                          <strong>{entry.user_id}</strong>
-                          {entry.team_id && (
-                            <div><small className="text-muted">{entry.team_id}</small></div>
-                          )}
+                      <tr key={entry._id} className={getRankClass(entry.rank)}>
+                        <td className="rank-cell">
+                          <span className="rank-badge">{getMedalIcon(entry.rank)}</span>
                         </td>
-                        <td><strong>{entry.points}</strong></td>
+                        <td className="user-cell">
+                          <div className="user-info">
+                            <strong className="user-name">{entry.user_id}</strong>
+                            {entry.team_id && (
+                              <small className="team-tag">{entry.team_id}</small>
+                            )}
+                          </div>
+                        </td>
+                        <td className="points-cell text-end">
+                          <span className="points-value">{entry.points}</span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -109,27 +123,34 @@ function Leaderboard() {
         </div>
 
         {/* Team Leaderboard */}
-        <div className="col-md-6 mb-4">
-          <div className="card shadow">
-            <div className="card-header bg-success text-white">
-              <h3 className="mb-0">Team Rankings</h3>
+        <div className="col-lg-6 mb-4">
+          <div className="leaderboard-card">
+            <div className="leaderboard-header team-header">
+              <div className="header-icon">🤝</div>
+              <h3 className="leaderboard-title">Team Rankings</h3>
             </div>
-            <div className="card-body">
+            <div className="leaderboard-body">
               <div className="table-responsive">
-                <table className="table table-hover">
+                <table className="table table-dark leaderboard-table">
                   <thead>
                     <tr>
                       <th>Rank</th>
                       <th>Team</th>
-                      <th>Points</th>
+                      <th className="text-end">Points</th>
                     </tr>
                   </thead>
                   <tbody>
                     {teamLeaderboard.map((entry) => (
-                      <tr key={entry._id}>
-                        <td className="fs-4">{getMedalIcon(entry.rank)}</td>
-                        <td><strong>{entry.team_id}</strong></td>
-                        <td><strong>{entry.points}</strong></td>
+                      <tr key={entry._id} className={getRankClass(entry.rank)}>
+                        <td className="rank-cell">
+                          <span className="rank-badge">{getMedalIcon(entry.rank)}</span>
+                        </td>
+                        <td className="team-cell">
+                          <strong className="team-name">{entry.team_id}</strong>
+                        </td>
+                        <td className="points-cell text-end">
+                          <span className="points-value">{entry.points}</span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

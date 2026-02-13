@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
+import Home from './components/Home';
 import Users from './components/Users';
 import Teams from './components/Teams';
 import Activities from './components/Activities';
@@ -53,7 +54,7 @@ function App() {
         {/* Main Content */}
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<Navigate to="/users" replace />} />
+            <Route path="/" element={<Home />} />
             <Route path="/users" element={<Users />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/activities" element={<Activities />} />

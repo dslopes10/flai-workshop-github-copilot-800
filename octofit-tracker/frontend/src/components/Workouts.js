@@ -39,13 +39,22 @@ function Workouts() {
     fetchWorkouts();
   }, []);
 
-  const getDifficultyBadge = (difficulty) => {
-    const badges = {
-      'beginner': 'success',
-      'intermediate': 'warning',
-      'advanced': 'danger'
+  const getDifficultyColor = (difficulty) => {
+    const colors = {
+      'easy': { bg: 'rgba(34, 197, 94, 0.2)', border: '#22c55e', glow: 'rgba(34, 197, 94, 0.4)' },
+      'medium': { bg: 'rgba(234, 179, 8, 0.2)', border: '#eab308', glow: 'rgba(234, 179, 8, 0.4)' },
+      'hard': { bg: 'rgba(239, 68, 68, 0.2)', border: '#ef4444', glow: 'rgba(239, 68, 68, 0.4)' }
     };
-    return badges[difficulty?.toLowerCase()] || 'secondary';
+    return colors[difficulty?.toLowerCase()] || colors['medium'];
+  };
+
+  const getTypeColor = (type) => {
+    const colors = {
+      'strength': { bg: 'rgba(99, 102, 241, 0.2)', border: '#6366f1', glow: 'rgba(99, 102, 241, 0.4)' },
+      'cardio': { bg: 'rgba(236, 72, 153, 0.2)', border: '#ec4899', glow: 'rgba(236, 72, 153, 0.4)' },
+      'flexibility': { bg: 'rgba(139, 92, 246, 0.2)', border: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.4)' }
+    };
+    return colors[type?.toLowerCase()] || colors['strength'];
   };
 
   if (loading) return <div className="container mt-5"><h2>Loading workouts...</h2></div>;
@@ -55,37 +64,67 @@ function Workouts() {
     <div className="container mt-5">
       <h1 className="mb-4">OctoFit Workouts</h1>
       <div className="row">
-        {workouts.map((workout) => (
-          <div key={workout._id} className="col-md-6 col-lg-4 mb-4">
-            <div className="card h-100 shadow">
-              <div className="card-header bg-dark text-white">
-                <h4 className="mb-0">{workout.name}</h4>
-              </div>
-              <div className="card-body">
-                <div className="mb-3">
-                  <span className={`badge bg-${getDifficultyBadge(workout.difficulty)} me-2`}>
-                    {workout.difficulty}
-                  </span>
-                  <span className="badge bg-info">{workout.type}</span>
+        {workouts.map((workout) => {
+          const difficultyColor = getDifficultyColor(workout.difficulty);
+          const typeColor = getTypeColor(workout.type);
+          
+          return (
+            <div key={workout._id} className="col-md-6 col-lg-4 mb-4">
+              <div className="workout-card h-100">
+                <div className="workout-card-header">
+                  <h4 className="workout-title">{workout.name}</h4>
+                  <div className="workout-badges">
+                    <span 
+                      className="workout-badge difficulty-badge"
+                      style={{
+                        background: difficultyColor.bg,
+                        borderColor: difficultyColor.border,
+                        color: difficultyColor.border,
+                        boxShadow: `0 0 10px ${difficultyColor.glow}`
+                      }}
+                    >
+                      {workout.difficulty?.toUpperCase()}
+                    </span>
+                    <span 
+                      className="workout-badge type-badge"
+                      style={{
+                        background: typeColor.bg,
+                        borderColor: typeColor.border,
+                        color: typeColor.border,
+                        boxShadow: `0 0 10px ${typeColor.glow}`
+                      }}
+                    >
+                      {workout.type?.toUpperCase()}
+                    </span>
+                  </div>
                 </div>
-                <h6 className="card-subtitle mb-3 text-muted">
-                  Duration: {workout.duration_minutes} minutes
-                </h6>
-                <p className="card-text">{workout.description}</p>
-                <h6 className="mt-3">Exercises:</h6>
-                <ul className="list-group list-group-flush">
-                  {workout.exercises && workout.exercises.map((exercise, index) => (
-                    <li key={index} className="list-group-item">
-                      {exercise}
-                    </li>
-                  ))}
-                </ul>
+                <div className="workout-card-body">
+                  <div className="workout-duration">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>{workout.duration_minutes} minutes</span>
+                  </div>
+                  <p className="workout-description">{workout.description}</p>
+                  <div className="workout-exercises">
+                    <h6 className="exercises-title">Exercises:</h6>
+                    <div className="exercises-list">
+                      {workout.exercises && workout.exercises.map((exercise, index) => (
+                        <div key={index} className="exercise-item">
+                          <span className="exercise-number">{index + 1}</span>
+                          <span className="exercise-name">{exercise}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      <p className="text-muted">Total workouts: {workouts.length}</p>
+      <p className="workout-count">Total workouts: {workouts.length}</p>
     </div>
   );
 }
